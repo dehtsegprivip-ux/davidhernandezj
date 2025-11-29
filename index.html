@@ -597,9 +597,9 @@
   }
 
   .header-image img {
-    max-width: 250px;
+    max-width: 200px;
     height: auto;
-    max-height: 160px;
+    max-height: 130px;
     border-radius: 1rem;
     border: 1px solid rgba(0, 224, 255, 0.35);
     box-shadow:
@@ -3701,21 +3701,12 @@ aria-label="Volver al inicio de la página">
       resize();
       draw();
     })();    
-  </script>
-  <!-- Lógica del visor de imagenes -->
-  <script>
-    (function() {
-      const modal = documentElementById("imageModal");
-      const modalImg = documentElementById("imageModalImg");
-      if (!modal || !modalImg) return;
-
-      // Abrir modal al clicar la miniatura
+     // Abrir modal al clicar la miniatura
       document.querySelectorAll(".cert-thumb img").forEach((img) => {
         img.addEventListener("click", () => {
           modalImg.src = img.src;
           modalImg.alt = img.alt || "Certificado ampliado";
           modal.classList.add("open");
-        });
       });
 
       // Cerrar al hacer click fuera de la imagen
@@ -3726,14 +3717,46 @@ aria-label="Volver al inicio de la página">
       });
     })();
   </script>
-  <!-- Visor de imagen en grande -->
-  <div class="image-modal" id="imageModal">
-    <img src="" alt="Certificado ampliado" />
-  </div>
   <!-- Visor de imagen (modal) -->
 <div id="imageModal" class="image-modal" aria-hidden="true">
   <img src="" alt="Certificado ampliado" />
 </div>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const modal = document.getElementById("imageModal");
+    if (!modal) return;
+
+    const modalImg = modal.querySelector("img");
+
+    // Abrir modal al hacer clic en una miniatura
+    document.querySelectorAll(".cert-thumb img").forEach((img) => {
+      img.addEventListener("click", () => {
+        modalImg.src = img.src;
+        modalImg.alt = img.alt || "Certificado ampliado";
+        modal.classList.add("open");
+        modal.setAttribute("aria-hidden", "false");
+      });
+    });
+
+    // Cerrar haciendo clic en el fondo oscuro
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        modal.classList.remove("open");
+        modalImg.src = "";
+        modal.setAttribute("aria-hidden", "true");
+      }
+    });
+
+    // Cerrar con la tecla ESC
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && modal.classList.contains("open")) {
+        modal.classList.remove("open");
+        modalImg.src = "";
+        modal.setAttribute("aria-hidden", "true");
+      }
+    });
+  });
+</script>
 
 </body>
 </html>
